@@ -51,6 +51,7 @@
       var p = document.getElementById('t');
       p.innerHTML="剩余次数:"+timeleft;
 
+      p.style.display = "inline"
       countPlay = totalPlay - timeleft;
     }
 
@@ -59,6 +60,7 @@
         form.style.top = offsetY+200+'px';
         form.style.left = offsetX+'px';
         input = document.getElementById('inputText');
+        form.style.display = "inline"
     }
 
     function initBtn()
@@ -66,6 +68,7 @@
       btn = document.getElementById('btnGo');
       btn.style.top = offsetY+350+'px';
       btn.style.left = offsetX+220+'px';
+      btn.style.display = "inline"
     }
 
     function initText() {
@@ -211,9 +214,8 @@
         }
 
         formText();
-
     }
 
-
+    //window.onbeforeunload  = function() { init() };
     window.onload = function() { init() };
 })();

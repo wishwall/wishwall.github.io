@@ -43,22 +43,33 @@
   //星云链数据
   var dappAddress = "n1heozU25i78GDe595qESbZujxER1dEfRPP"
   var nebulas = require("nebulas"),
-        Account = nebulas.Account,
-        neb = new nebulas.Neb();
-    neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
-
-
+  Account = nebulas.Account,
+  neb = new nebulas.Neb();
+  neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
 
   function showMe()
   {
     console.log("showMe was call !!");
 
-    var from = Account.NewAccount().getAddressString();
+    var account = Account.NewAccount() ;
 
+    var addr = account.getAddressString();
+    var priKey = account.getPrivateKeyString();
+    var pubKey = account.getPublicKeyString();
+    var isOK = Account.isValidAddress(addr);
+
+    console.log("----------------------------------")
+    console.log("address: " + addr)
+    console.log("priKey:  " + priKey)
+    console.log("pubKey: " + pubKey)
+    console.log("isOK: " + isOK)
+    console.log("----------------------------------")
+    var from = account.getAddressString();
+    console.log("address: " + from)
     var value = "0";
-    var nonce = "0"
-    var gas_price = "1000000"
-    var gas_limit = "2000000"
+    var nonce = "0";
+    var gas_price = "1000000";
+    var gas_limit = "2000000";
     var callFunction = "get";
     var callArgs ="";
 
@@ -103,15 +114,16 @@
     var to = dappAddress;
     var value = "0";
     var callFunction = "set"
-    var callArgs = "[\"" + "Michael" + "\",\"" + "99" + "\"]"
+    //var callArgs = "[\"" + "Michael" + "\",\"" + "99" + "\"]"
+    var callArgs = "[\"Michael\" ,+ \"99\"]"
 
-      serialNumber = nebPay.call(to, value, callFunction, callArgs, {    //使用nebpay的call接口去调用合约,
-          listener: cbPush        //设置listener, 处理交易返回信息
-      });
+    serialNumber = nebPay.call(to, value, callFunction, callArgs, {    //使用nebpay的call接口去调用合约,
+        listener: cbPush        //设置listener, 处理交易返回信息
+    });
 
-      intervalQuery = setInterval(function () {
-          funcIntervalQuery();
-      }, 5000);
+      //intervalQuery = setInterval(function () {
+      //    funcIntervalQuery();
+      //}, 5000);
   }
 
   var intervalQuery
