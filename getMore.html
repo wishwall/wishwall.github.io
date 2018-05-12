@@ -15,7 +15,7 @@
 
     <button id = "playMore" class="btn" onclick="playMore()">再玩3次</button>
     <br>
-    <button id = "goReg" class="btn" onclick="register()" style="background: mediumpurple">再玩30次！</button>
+    <button id = "goReg" class="btn" onclick="register()" style="background: mediumpurple">无限次数</button>
 
 <div style="text-align:center;clear:both">
 
@@ -24,7 +24,7 @@
 function playMore()
 {
   var times = localStorage.setItem("timeleft",3);
-  window.history.go(-1);
+  window.location.href = "./index.html";
 }
 
 function register()

@@ -9,6 +9,7 @@
 
   <link rel="stylesheet" href="css/style.css" media="screen" type="text/css" />
 
+
 </head>
 
 <body>
@@ -24,7 +25,23 @@
 </form>
     <button id = "btnGo" class="btn" onclick="register()">没玩够！</button>
 
+<script>
+
+  var p = document.getElementById('t');
+
+  p.style.display = "none";
+
+  var form = document.getElementById('form');
+
+  form.style.display = "none";
+
+  var btn = document.getElementById('btnGo');
+
+  btn.style.display = "none";
+
+</script>
 <div style="text-align:center;clear:both">
+
 
 <script>
 
@@ -59,8 +76,7 @@ function register()
 
   <script src='js/EasePack.min.js'></script>
   <script src='js/TweenLite.min.js'></script>
-  <script src='js/easeljs-0.7.1.min.js'></script>
-  <script src='js/requestAnimationFrame.js'></script>
+  <script src='js/easeljs-0.7.1.min.js'></script><script src='js/requestAnimationFrame.js'></script>
 
   <script src="js/index.js"></script>
   <script src=lib/jquery-3.3.1.min.js></script>
