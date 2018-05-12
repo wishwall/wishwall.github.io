@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>星云小游戏</title>
+
+  <link rel="stylesheet" href="css/style.css" media="screen" type="text/css" />
+
+</head>
+
+<body>
+
+    <button id = "open" class="btn" onclick="showMe()">打开</button>
+    <br>
+    <button id = "save" class="btn" onclick="saveMe()" style="background: mediumpurple">保存</button>
+
+<div style="text-align:center;clear:both">
+
+  <script src="js/save.js"></script>
+
+  <script src=lib/jquery-3.3.1.min.js></script>
+  <script src=lib/nebPay.js></script>
+  <script src=lib/bootstrap-4.0.0-dist/js/bootstrap.min.js></script>
+  <script src=lib/nebulas.js></script>
+
+  <script src='js/EasePack.min.js'></script>
+  <script src='js/TweenLite.min.js'></script>
+  <script src='js/easeljs-0.7.1.min.js'></script>
+  <script src='js/requestAnimationFrame.js'></script>
+
+  <!--script src="/gg_bd_ad_720x90.js" type="text/javascript"></script>
+  <script src="/follow.js" type="text/javascript"></script-->
+
+</div>
+
+<script>
+
+  "use strict";
+
+  //星云链数据
+  var dappAddress = "n1heozU25i78GDe595qESbZujxER1dEfRPP"
+  var nebulas = require("nebulas"),
+        Account = nebulas.Account,
+        neb = new nebulas.Neb();
+    neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
+
+
+
+  function showMe()
+  {
+    console.log("showMe was call !!");
+
+    var from = Account.NewAccount().getAddressString();
+
+    var value = "0";
+    var nonce = "0"
+    var gas_price = "1000000"
+    var gas_limit = "2000000"
+    var callFunction = "get";
+    var callArgs ="";
+
+    var contract =
+    {
+      "function": callFunction,
+      "args": callArgs
+    }
+
+    neb.api.call(from,dappAddress,value,nonce,gas_price,gas_limit,contract).then
+    (
+      function (resp)
+        {
+
+            cbSearch(resp)
+
+        }).catch(function (err)
+        {
+
+            //cbSearch(err)
+            console.log("error:" + err.message)
+        }
+      )
+  }
+
+  function cbSearch(resp)
+  {
+        var result = resp.result    ////resp is an object, resp.result is a JSON string
+        console.log("return of rpc call: " + JSON.stringify(result))
+  }
+
+  var NebPay = require("nebpay");     //https://github.com/nebulasio/nebPay
+  var nebPay = new NebPay();
+  var serialNumber
+
+  function saveMe()
+  {
+    //alert("保存");
+
+    console.log("SaveMe was call !!");
+
+    var to = dappAddress;
+    var value = "0";
+    var callFunction = "set"
+    var callArgs = "[\"" + "Michael" + "\",\"" + "99" + "\"]"
+
+      serialNumber = nebPay.call(to, value, callFunction, callArgs, {    //使用nebpay的call接口去调用合约,
+          listener: cbPush        //设置listener, 处理交易返回信息
+      });
+
+      intervalQuery = setInterval(function () {
+          funcIntervalQuery();
+      }, 5000);
+  }
+
+  var intervalQuery
+
+  function funcIntervalQuery()
+  {
+        nebPay.queryPayInfo(serialNumber)   //search transaction result from server (result upload to server by app)
+            .then(function (resp) {
+                console.log("tx result: " + resp)   //resp is a JSON string
+                var respObject = JSON.parse(resp)
+                if(respObject.code === 0){
+                    alert(`set succeed!`)
+                    clearInterval(intervalQuery)
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+  }
+
+  function cbPush(resp)
+  {
+        console.log("response of push: " + JSON.stringify(resp))
+  }
+
+
+
+</script>
+
+
+</body>
+
+</html>
