@@ -64,6 +64,10 @@ function initData()
     isHaveWallet = true ;
     p.style.display = "none";
   }
+  else
+  {
+    isHaveWallet = false ;
+  }
 }
 
 function initForm() {
@@ -198,6 +202,17 @@ function addListeners()
     form.addEventListener('submit', function(e)
     {
         e.preventDefault();
+        //判定是否安装过钱包
+        if (typeof(webExtensionWallet) !== "undefined")
+        {
+          isHaveWallet = true ;
+          p.style.display = "none";
+        }
+        else
+        {
+          isHaveWallet = false ;
+        }
+
         //没有安装钱包控制次数
         if( isHaveWallet === false )
         {
