@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>星云小游戏</title>
+
+  <link rel="stylesheet" href="css/style.css" media="screen" type="text/css" />
+
+</head>
+
+<body>
+
+    <button id = "playMore" class="btn" onclick="playMore()">再玩3次</button>
+    <br>
+    <button id = "goReg" class="btn" onclick="register()" style="background: mediumpurple">无限次数</button>
+
+<div style="text-align:center;clear:both">
+
+<script>
+
+function playMore()
+{
+  var times = localStorage.setItem("timeleft",3);
+  window.location.href = "./index.html";
+}
+
+function register()
+{
+  window.location.href = "./register.html";
+}
+
+</script>
+</div>
+
+  <script src='js/EasePack.min.js'></script><script src='js/TweenLite.min.js'></script><script src='js/easeljs-0.7.1.min.js'></script><script src='js/requestAnimationFrame.js'></script>
+
+  <script src="js/getMore.js"></script>
+
+</body>
+
+</html>
