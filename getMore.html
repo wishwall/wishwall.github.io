@@ -21,18 +21,26 @@
 
 <script>
 
-function playMore()
-{
-  var times = localStorage.setItem("timeleft",3);
-  window.location.href = "./index.html";
-}
+  var playMore = document.getElementById('playMore');
 
-function register()
-{
-  window.location.href = "./register.html";
-}
+  playMore.style.display = "none";
 
+  var goReg = document.getElementById('playMore');
+
+  goReg.style.display = "none";
+
+  function playMore()
+  {
+    var times = localStorage.setItem("timeleft", 3);
+    window.location.href = "./index.html";
+  }
+
+  function register()
+  {
+    window.location.href = "./register.html";
+  }
 </script>
+
 </div>
 
   <script src='js/EasePack.min.js'></script><script src='js/TweenLite.min.js'></script><script src='js/easeljs-0.7.1.min.js'></script><script src='js/requestAnimationFrame.js'></script>
