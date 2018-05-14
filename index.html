@@ -97,71 +97,96 @@ function register()
   var dappAddress = "n1rPJfGmT4ymam6wVn6yKJ8fa2DTqSYLnD6";
   var NebPay = require("nebpay");     //https://github.com/nebulasio/nebPay
   var nebPay = new NebPay();
-  var serialNumber
+  var serialNumber;
+  var fromAddr;
+
+
+  window.addEventListener('message', function(e)
+  {
+    console.log("recived by page:" + e + ", e.data:"+ JSON.stringify(e.data));
+
+    if(!!e.data.data.account)
+    {
+        fromAddr = e.data.data.account;
+
+        var from = fromAddr;
+
+        var value = "0";
+        var nonce = "0"
+        var gas_price = "1000000"
+        var gas_limit = "2000000"
+        var callFunction = "get";
+        //var word= "Jack"
+        var callArgs = "[\"" + from + "\"]"; //in the form of ["args"]
+        var contract = {
+            "function": callFunction,
+            "args": callArgs
+        }
+
+        neb.api.call(from,dappAddress,value,nonce,gas_price,gas_limit,contract).then(function (resp) {
+            cbSearch(resp)
+        }).catch(function (err) {
+            //cbSearch(err)
+            console.log("error:" + err.message)
+        })
+
+        //return of search,
+        function cbSearch(resp) {
+            var result = resp.result    ////resp is an object, resp.result is a JSON string
+            console.log("return of rpc call: " + JSON.stringify(result))
+
+            if (result === 'null')
+            {
+              alert("你还没有在许愿墙上永久许愿！");
+            }
+            else
+            {
+                //if result is not null, then it should be "return value" or "error message"
+                try{
+                    result = JSON.parse(result)
+                }
+                catch (err){
+                    //result is the error message
+                }
+
+                console.log("resultData:" + result.word)
+                input.value = result.word;
+
+                if(textFormed)
+                {
+                    explode();
+                    if(input.value != '') {
+                        setTimeout(function() {
+                            createText(input.value.toUpperCase());
+                        }, 810);
+                    } else {
+                        textFormed = false;
+                    }
+                } else {
+                    createText(input.value.toUpperCase());
+                }
+            }
+        }
+    }
+    else
+    {
+
+    }
+  });
 
 function btnShowPress()
 {
       //测试新账号
       //var from = nebulas.Account.NewAccount().getAddressString();
 
-      var from = "n1SEgV23gcj51qyxdUaqT24PfAwW1VWXPiY";
-
-      var value = "0";
-      var nonce = "0"
-      var gas_price = "1000000"
-      var gas_limit = "2000000"
-      var callFunction = "get";
-      //var word= "Jack"
-      var callArgs = "[\"" + from + "\"]"; //in the form of ["args"]
-      var contract = {
-          "function": callFunction,
-          "args": callArgs
-      }
-
-      neb.api.call(from,dappAddress,value,nonce,gas_price,gas_limit,contract).then(function (resp) {
-          cbSearch(resp)
-      }).catch(function (err) {
-          //cbSearch(err)
-          console.log("error:" + err.message)
-      })
-
-      //return of search,
-      function cbSearch(resp) {
-          var result = resp.result    ////resp is an object, resp.result is a JSON string
-          console.log("return of rpc call: " + JSON.stringify(result))
-
-          if (result === 'null')
-          {
-            alert("你还没有在许愿墙上永久许愿！");
-          }
-          else
-          {
-              //if result is not null, then it should be "return value" or "error message"
-              try{
-                  result = JSON.parse(result)
-              }
-              catch (err){
-                  //result is the error message
-              }
-
-              console.log("resultData:" + result.word)
-              input.value = result.word;
-
-              if(textFormed)
-              {
-                  explode();
-                  if(input.value != '') {
-                      setTimeout(function() {
-                          createText(input.value.toUpperCase());
-                      }, 810);
-                  } else {
-                      textFormed = false;
-                  }
-              } else {
-                  createText(input.value.toUpperCase());
-              }
-          }
-      }
+      window.postMessage
+            ({
+                  "target": "contentscript",
+                  "data":{
+                  },
+                  "method": "getAccount",
+              }, "*");
+      
 }
 
 function save()
