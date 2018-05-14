@@ -7,17 +7,15 @@
 
     var btnOpen, btnSave ;
 
-    function init()
-    {
-        initStages();
-        initBtn() ;
+    function init() {
+      initStages();
+      initBtn();
     }
 
     // Init Canvas
-    function initStages()
-    {
-        offsetX = (window.innerWidth-600)/2;
-        offsetY = (window.innerHeight-300)/2;
+    function initStages() {
+      offsetX = (window.innerWidth - 600) / 2;
+      offsetY = (window.innerHeight - 300) / 2;
     }
 
     function initData()

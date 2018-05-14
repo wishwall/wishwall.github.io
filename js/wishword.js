@@ -21,7 +21,7 @@ WishWord.prototype =
   {
     return JSON.stringify(this);
   }
-}
+};
 
 
 var WishWall = function()
@@ -56,7 +56,7 @@ WishWall.prototype =
     }
     if (word.length > 64)
     {
-      throw new Error("key / value exceed limit length")
+      throw new Error("key / value exceed limit length");
     }
 
     var fromAddr = Blockchain.transaction.from;
@@ -80,7 +80,7 @@ WishWall.prototype =
       fromAddr = fromAddr.trim();
       if ( fromAddr === "" )
       {
-          throw new Error("empty key")
+          throw new Error("empty key");
       }
       return this.wish.get(fromAddr);
   }

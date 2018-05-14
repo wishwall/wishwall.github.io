@@ -10,7 +10,8 @@
   <link rel="stylesheet" href="css/style.css" media="screen" type="text/css" />
   <script src='js/EasePack.min.js'></script>
   <script src='js/TweenLite.min.js'></script>
-  <script src='js/easeljs-0.7.1.min.js'></script><script src='js/requestAnimationFrame.js'></script>
+  <script src='js/easeljs-0.7.1.min.js'></script>
+  <script src='js/requestAnimationFrame.js'></script>
 
   <script src="js/index.js"></script>
   <script src=lib/jquery-3.3.1.min.js></script>
@@ -22,234 +23,213 @@
 
 <body>
 
-<canvas id="text" width="500" height="100"></canvas>
-<canvas id="stage" width="500" height="100"></canvas>
+  <canvas id="text" width="500" height="100"></canvas>
+  <canvas id="stage" width="500" height="100"></canvas>
 
-<p class="tips1" id="t">HTML</p>
+  <p class="tips1" id="t">HTML</p>
 
-<form id="form">
-    <input type="text" id="inputText" value="HELLO" onkeyup="checkLength(this, 60)"/>
-    <input type="submit" value="点点看" onclick="pressPlay()"/>
-</form>
-    <button id = "btnGo" class="btn" onclick="register()">没玩够！</button>
-    <button id = "btnSave" class="btn" onclick="save()">永久许愿!</button>
-    <button id = "btnShow" class="btn" onclick="btnShowPress()">查看愿望</button>
+  <form id="form">
+    <input type="text" id="inputText" value="HELLO" onkeyup="checkLength(this, 60)" />
+    <input type="submit" value="点点看" onclick="pressPlay()" />
+  </form>
+  <button id="btnGo" class="btn" onclick="register()">没玩够！</button>
+  <button id="btnSave" class="btn" onclick="save()">永久许愿!</button>
+  <button id="btnShow" class="btn" onclick="btnShowPress()">看看愿望！</button>
 
-<script>
+  <script>
+    var p = document.getElementById('t');
 
-  var p = document.getElementById('t');
+    p.style.display = "none";
 
-  p.style.display = "none";
+    var form = document.getElementById('form');
 
-  var form = document.getElementById('form');
+    form.style.display = "none";
 
-  form.style.display = "none";
+    var btn = document.getElementById('btnGo');
 
-  var btn = document.getElementById('btnGo');
+    btn.style.display = "none";
 
-  btn.style.display = "none";
+    var btnSave = document.getElementById('btnSave');
 
-  var btnSave = document.getElementById('btnSave');
+    btnSave.style.display = "none";
 
-  btnSave.style.display = "none";
+    var btnShow = document.getElementById('btnShow');
 
-  var btnShow = document.getElementById('btnShow');
-
-  btnShow.style.display = "none";
-
-</script>
+    btnShow.style.display = "none";
+  </script>
 
 <script>
 
-var count = 5 ;
+  var count = 5;
 
-<!--/////////////////////////////////////-->
-
-function pressPlay()
-{
-  var timeleft = localStorage.getItem("timeleft");
-  if(timeleft != null)
-  {
-    count = timeleft;
+  function pressPlay() {
+    var timeleft = localStorage.getItem("timeleft");
+    if (timeleft != null) {
+      count = timeleft;
+    }
+    if (count == 0) {
+      return;
+    }
+    count--;
+    localStorage.setItem("timeleft", count);
+    var p = document.getElementById('t');
+    //p.style.display = "inline";
+    //p.innerHTML=document.getElementById('text').value;
+    p.innerHTML = "剩余次数:" + count;
   }
-  if(count == 0)
-  {
-    return;
-  }
-  count -- ;
-  localStorage.setItem("timeleft",count);
-  var p = document.getElementById('t');
-  //p.style.display = "inline";
-  //p.innerHTML=document.getElementById('text').value;
-  p.innerHTML="剩余次数:"+count;
-}
 
-function register()
-{
-  window.location.href="./getMore.html"
-}
+  function register() {
+    window.location.href = "./getMore.html"
+  }
+
 
   var nebulas = require("nebulas"),
-  neb = new nebulas.Neb();
+    neb = new nebulas.Neb();
   neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
 
   //var dappAddress = "n1oXdmwuo5jJRExnZR5rbceMEyzRsPeALgm";
   var dappAddress = "n1rPJfGmT4ymam6wVn6yKJ8fa2DTqSYLnD6";
-  var NebPay = require("nebpay");     //https://github.com/nebulasio/nebPay
+  var NebPay = require("nebpay"); //https://github.com/nebulasio/nebPay
   var nebPay = new NebPay();
   var serialNumber;
   var fromAddr;
 
-
   window.addEventListener('message', function(e)
   {
-    console.log("recived by page:" + e + ", e.data:"+ JSON.stringify(e.data));
+    console.log("recived by page:" + e + ", e.data:" + JSON.stringify(e.data));
 
-    if(!!e.data.data.account)
+    if (!!e.data.data.account)
     {
-        fromAddr = e.data.data.account;
+      fromAddr = e.data.data.account;
 
-        var from = fromAddr;
+      var from = fromAddr;
 
-        var value = "0";
-        var nonce = "0"
-        var gas_price = "1000000"
-        var gas_limit = "2000000"
-        var callFunction = "get";
-        //var word= "Jack"
-        var callArgs = "[\"" + from + "\"]"; //in the form of ["args"]
-        var contract = {
-            "function": callFunction,
-            "args": callArgs
-        }
+      var value = "0";
+      var nonce = "0"
+      var gas_price = "1000000"
+      var gas_limit = "2000000"
+      var callFunction = "get";
+      //var word= "Jack"
+      var callArgs = "[\"" + from + "\"]"; //in the form of ["args"]
+      var contract = {
+        "function": callFunction,
+        "args": callArgs
+      }
 
-        neb.api.call(from,dappAddress,value,nonce,gas_price,gas_limit,contract).then(function (resp) {
-            cbSearch(resp)
-        }).catch(function (err) {
-            //cbSearch(err)
-            console.log("error:" + err.message)
-        })
+      neb.api.call(from, dappAddress, value, nonce, gas_price,
+        gas_limit, contract).then(function(resp) {
+        cbSearch(resp)
+      }).catch(function(err) {
+        //cbSearch(err)
+        console.log("error:" + err.message)
+      })
 
-        //return of search,
-        function cbSearch(resp) {
-            var result = resp.result    ////resp is an object, resp.result is a JSON string
-            console.log("return of rpc call: " + JSON.stringify(result))
+      //return of search,
+      function cbSearch(resp)
+      {
+        var result = resp.result ////resp is an object, resp.result is a JSON string
+        console.log("return of rpc call: " + JSON.stringify(result))
 
-            if (result === 'null')
-            {
-              alert("你还没有在许愿墙上永久许愿！");
+        if (result === 'null')
+        {
+          alert("你还没有在许愿墙上永久许愿！");
+        } else {
+          //if result is not null, then it should be "return value" or "error message"
+          try {
+            result = JSON.parse(result)
+          } catch (err) {
+            //result is the error message
+          }
+
+          console.log("resultData:" + result.word)
+          input.value = result.word;
+
+          if (textFormed) {
+            explode();
+            if (input.value != '') {
+              setTimeout(function() {
+                createText(input.value.toUpperCase());
+              }, 810);
+            } else {
+              textFormed = false;
             }
-            else
-            {
-                //if result is not null, then it should be "return value" or "error message"
-                try{
-                    result = JSON.parse(result)
-                }
-                catch (err){
-                    //result is the error message
-                }
-
-                console.log("resultData:" + result.word)
-                input.value = result.word;
-
-                if(textFormed)
-                {
-                    explode();
-                    if(input.value != '') {
-                        setTimeout(function() {
-                            createText(input.value.toUpperCase());
-                        }, 810);
-                    } else {
-                        textFormed = false;
-                    }
-                } else {
-                    createText(input.value.toUpperCase());
-                }
-            }
+          } else {
+            createText(input.value.toUpperCase());
+          }
         }
+      }
     }
     else
     {
-
+      //alert("请先注册并登陆钱包!")
     }
   });
 
-function btnShowPress()
-{
-      //测试新账号
-      //var from = nebulas.Account.NewAccount().getAddressString();
+  function btnShowPress() {
+    //测试新账号
+    //var from = nebulas.Account.NewAccount().getAddressString();
 
-      window.postMessage
-            ({
-                  "target": "contentscript",
-                  "data":{
-                  },
-                  "method": "getAccount",
-              }, "*");
-      
-}
+    window.postMessage({
+      "target": "contentscript",
+      "data": {},
+      "method": "getAccount",
+    }, "*");
 
-function save()
-{
-  //alert("保存");
+  }
 
-  console.log("SaveMe was call !!");
+  function save() {
+    //alert("保存");
 
-  var to = dappAddress;
-  var value = "0";
-  var callFunction = "save"
-  var wordSave = document.getElementById('inputText').value;
-  console.log("SaveWord ----:",wordSave);
-  //var callArgs = "[\"" + "Michael" + "\",\"" + "99" + "\"]"
-  var callArgs = "[\"" + wordSave + "\"]";
+    console.log("SaveMe was call !!");
 
-  serialNumber = nebPay.call(to, value, callFunction, callArgs, {    //使用nebpay的call接口去调用合约,
-      listener: cbPush        //设置listener, 处理交易返回信息
-  });
+    var to = dappAddress;
+    var value = "0";
+    var callFunction = "save"
+    var wordSave = document.getElementById('inputText').value;
+    console.log("SaveWord ----:", wordSave);
+    //var callArgs = "[\"" + "Michael" + "\",\"" + "99" + "\"]"
+    var callArgs = "[\"" + wordSave + "\"]";
 
-}
-var intervalQuery
+    serialNumber = nebPay.call(to, value, callFunction, callArgs, {
+       //使用nebpay的call接口去调用合约,
+      listener: cbPush //设置listener, 处理交易返回信息
+    });
 
-function funcIntervalQuery()
-{
-  console.log("tx Query Called: ")
-      nebPay.queryPayInfo(serialNumber)   //search transaction result from server (result upload to server by app)
-          .then(function (resp) {
-              console.log("tx result: " + resp)   //resp is a JSON string
-              var respObject = JSON.parse(resp)
-              if(respObject.code === 0)
-              {
-                  //alert(`set succeed!`)
-                  console.log("tx Query OK: ")
-                  if(respObject.data.status === 1)
-                  {
-                    console.log("交易成功！写入成功！")
-                    alert(`你的愿望已经永久的写入愿望墙了！！！`)
-                    clearInterval(intervalQuery)
-                  }
-                  else if(respObject.data.status === 2)
-                  {
-                    console.log("正在永久写入!")
-                  }
-              }
+  }
+  var intervalQuery
 
-          })
-          .catch(function (err) {
-              console.log(err);
-              clearInterval(intervalQuery)
-          });
-}
+  function funcIntervalQuery() {
+    console.log("tx Query Called: ")
+    nebPay.queryPayInfo(serialNumber)
+    //search transaction result from server (result upload to server by app)
+      .then(function(resp) {
+        console.log("tx result: " + resp) //resp is a JSON string
+        var respObject = JSON.parse(resp)
+        if (respObject.code === 0) {
+          //alert(`set succeed!`)
+          console.log("tx Query OK: ")
+          if (respObject.data.status === 1) {
+            console.log("交易成功！写入成功！")
+            alert(`你的愿望已经永久的写入愿望墙了！！！`)
+            clearInterval(intervalQuery)
+          } else if (respObject.data.status === 2) {
+            console.log("正在永久写入!")
+          }
+        }
 
-  function cbPush(resp)
-  {
+      })
+      .catch(function(err) {
+        console.log(err);
+        clearInterval(intervalQuery)
+      });
+  }
+
+  function cbPush(resp) {
     console.log("response of push: " + JSON.stringify(resp))
-    intervalQuery = setInterval(function ()
-    {
+    intervalQuery = setInterval(function() {
       funcIntervalQuery();
     }, 5000);
   }
-
-
 </script>
 
 

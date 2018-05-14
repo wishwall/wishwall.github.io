@@ -34,6 +34,9 @@
       btnGo = document.getElementById('goReg');
       btnGo.style.top = offsetY+200+'px';
       btnGo.style.left = offsetX+220+'px';
+
+      btnMore.style.display = "inline"
+      btnGo.style.display = "inline"
     }
 
     window.onload = function() { init() };
